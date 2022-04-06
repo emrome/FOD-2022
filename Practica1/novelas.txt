@@ -1,0 +1,4 @@
+2 200.50 comedia
+novela1
+47 150 policial
+novela2

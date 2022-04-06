@@ -1,0 +1,2 @@
+vocales=["a","e","i","o","u"]
+print(vocales[-1:-3])

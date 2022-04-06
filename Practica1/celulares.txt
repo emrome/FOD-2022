@@ -1,0 +1,6 @@
+ 1  2.0000000000000000E+002  Xiaomi
+ 0 50  hola mundo
+ MI A2
+ 2  6.0000000000000000E+002  Apple
+ 40 20  alto celu mundo
+ iPhone 8

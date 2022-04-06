@@ -1,0 +1,3 @@
+ 1 200.00  Xiaomi
+ 50  hola mundo
+ MI A2
