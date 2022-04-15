@@ -18,7 +18,7 @@ type
 		edad:integer;
 		dni:str8;
 		apellido:string;
-		nombre:string
+		nombre:string;
 	end;
 	archivo_empleados=file of empleado;
 
