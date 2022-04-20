@@ -96,16 +96,15 @@ var
 begin
     rewrite(fText);
     reset(det);
-    leerDeMaestro(mae,regM);
     leer(det,regD);
+    leerDeMaestro(mae,regM)
     while(regM.nro_usuario<>VALOR_ALTO)do begin
-        regM.cantidadMailEnviados:=0;
-        while((regD.nro_usuario<>regM.nro_usuario)and(regM.nro_usuario<>VALOR_ALTO))do begin        
-            writeln(fText,regM.nro_usuario,regM.cantidadMailEnviados);
+        while((regM.nro_usuario<>VALOR_ALTO)and(regD.nro_usuario<>regM.nro_usuario))do begin   
+            writeln(fText,regM.nro_usuario,0);
             leerDeMaestro(mae,regM);
-            regM.cantidadMailEnviados:=0;
         end;
-        if(regM.nro_usuario<>VALOR_ALTO)then begin
+        if((regM.nro_usuario<>VALOR_ALTO)and(regD.nro_usuario=regM.nro_usuario))then begin
+            regM.cantidadMailEnviados:=0;
             while(regM.nro_usuario=regD.nro_usuario)do begin
                 regM.cantidadMailEnviados:=regM.cantidadMailEnviados+1;
                 leer(det,regD);

@@ -22,18 +22,6 @@ type
         asientos:integer;
     end;
 
-    regLista=record
-        destino:string[20];
-        fecha:longInt;
-        horaSalida:longInt;
-    end;
-
-    lista=^nodo;
-    nodo=record
-        dato:regLista;
-        sig:lista;
-    end;
-
 archivo=file of vuelo;
 
 
@@ -57,32 +45,17 @@ begin
     end;
 end;
 
-procedure agregarNodo(dato:regLista;var l,pri,ult:lista);
-var
-    nuevo:nodo;
-begin
-    new(nuevo); 
-    nuevo^.dato:=dato;
-    nuevo^.sig:=nil;
-    if(pri=nil)then 
-        pri:=nuevo
-    else 
-        ult^.sig:=nuevo;
-    ult:=nuevo;
-end;
 
-procedure actualizarMaestro_GenerarLista(var mae,det1,det2:archivo;var l:lista);
+procedure actualizarMaestro_GenerarLista(var mae,det1,det2:archivo;var fText:text);
 var
     reg1,reg2,regM,min:vuelo;
-    ult:lista;
-    datoLista:regLista;
     asientosLista,auxHora,cantAsientos:integer;
     auxDes:string[20];
     auxFec:longInt;
 begin
     writeln('Ingrese cantidad disponible de asientos de lo vuelos para crear la lista ');
     readln(asientosLista);
-    ult:=nil;
+    rewrite(fText);
 
     reset(mae);
     reset(det1);
@@ -104,12 +77,9 @@ begin
             seek(mae,filepos(mae)-1);                  
             write(mae,regM);
         end;
-        if(regM.asientos<asientosLista)then begin
-            dato.destino:=regM.destino;
-            dato.fecha:=regM.fecha;
-            dato.horaSalida:=regM.horaSalida;
-            agregarNodo(dato,l);
-        end;
+        if(regM.asientos<asientosLista)then 
+            write(fText,regM.fecha,' ',regM.horaSalida,' ',regM.destino);
+
     end;
     close(mae);
     close(det1);
@@ -122,10 +92,10 @@ end;
 var 
     maestro:archivo;
     detalle:archivo;
-    listaAsientosDisponiblesMenorA:lista;
+    texto:text;
 begin
     assign(maestro,'maestroEj14');
     assign(det1,'detalle1');
     assign(det2,'detalle2');
-    actualizarMaestro_GenerarLista(maestro,det1,det2,listaAsientosDisponiblesMenorA);
+    actualizarMaestro_GenerarLista(maestro,det1,det2,texto);
 end.

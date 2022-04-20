@@ -233,7 +233,7 @@ begin
             '5':addPhone(fileP);
             '6':modifyStock(fileP);
             '7':exportSinStock(fileP);
-        end;
+        
     until option='8'
 end;
 

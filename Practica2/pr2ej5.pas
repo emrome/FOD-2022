@@ -27,8 +27,8 @@ const
     VALOR_ALTO=9999;
 type
     persona=record
-        nombre:string[15];
-        apellido:string[15];
+        nombre:string[20];
+        apellido:string[20];
         DNI:integer;
     end;
 
@@ -169,7 +169,7 @@ begin
     end;
 end;
 
-procedure inicializar_info(var regM:info_maestro);
+procedure inicializarFallecido_info(var regM:info_maestro);
 begin
     regM.fallecio:=false;
     regM.matricula_medico:=0;
@@ -200,13 +200,13 @@ begin
         regM.acta_nacimiento:=minNac;
          
         while((minNac.partida<>minFallec.partida)and(minNac.partida<>VALOR_ALTO))do begin
-            inicializar_info(regM);//inicializa en falso y los valores por defecto
+            inicializarFallecido_info(regM);//inicializa en falso y los valores por defecto
             write(mae,regM);
             minimoNacimiento(arrDet,vN,minNac);
             regM.acta_nacimiento:=minNac;
         end;
 
-        if((minNac.partida<>VALOR_ALTO))then begin
+        if((minNac.partida<>VALOR_ALTO)and(minNac.partida=minFallec.partida))then begin
             regM.fallecio:=true;
             regM.matricula_medico:=minFallec.matricula_medico;
             regM.fecha:=minFallec.fecha;
@@ -236,26 +236,20 @@ begin
     while(not eof(mae))do begin
         read(mae,regM);
         with regM.acta_nacimiento do begin
-            writeln(fText,partida);
-            writeln(fText,nombre);
+            writeln(fText,partida,' ',nombre);
             writeln(fText,apellido);
-            writeln(fText,direc.calle);
-            writeln(fText,direc.nro);
-            writeln(fText,direc.piso);
-            writeln(fText,direc.depto);
+            writeln(fText,direc.calle,' ',direc.nro,' ',direc.piso,' ',direc.depto);
             writeln(fText,direc.ciudad);
             writeln(fText,matricula_medico);
+            writeln(fText,madre.DNI,' ',madre.apellido);
             writeln(fText,madre.nombre);
-            writeln(fText,madre.apellido);
-            writeln(fText,madre.DNI);
+            writeln(fText,padre.DNI,' ',padre.apellido);
             writeln(fText,padre.nombre);
-            writeln(fText,padre.apellido);
-            writeln(fText,padre.DNI);
         end;
         writeln(fText,regM.fallecio);//o tengo que poner 'fallecio'
         if(regM.fallecio)then begin
-            writeln(fText,regM.matricula_medico);
             writeln(fText,regM.fecha,' ',regM.hora,' ',regM.lugar);
+            writeln(fText,regM.matricula_medico);
         end;
     end;
     close(mae);
