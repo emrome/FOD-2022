@@ -127,11 +127,8 @@ begin
                 cont:=cont-1;
             end;
         end;
-        else
-            write
+
         pos:=pos+1;
-          
-        
     end;
     if(pos>0)and(cont<(filesize(a)-1))then begin
         seek(a,cont);
