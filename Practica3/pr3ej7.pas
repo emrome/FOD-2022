@@ -102,38 +102,37 @@ var
     pos,cont:integer;
 begin
     reset(a);
-    cont:=(filesize(a)-1);
-    pos:=0;
+    cont:=0;
+    pos:=filepos(a);
     
     
-    while(pos<=cont)do begin
+    while(pos<(filesize(a)-cont))do begin
 
         read(a,regM);
         
         if(estaBorrado('@',regM.nombre))then begin
-            
-            seek(a,cont);
-            read(a,aux);
-            while(estaBorrado('@',aux.nombre)and(pos<cont))do begin
-                cont:=cont-1;
-                seek(a,cont);
-                read(a,aux);
+            cont:=cont+1;
+            seek(a,(filesize(a)-cont));
+            read(a,regM);
+            while(estaBorrado('@',regM.nombre))and(pos<(filesize(a)-cont))do begin
+                cont:=cont+1;
+                seek(a,(filesize(a)-cont));
+                read(a,regM);
             end;
             
                 
-            if(not estaBorrado('@',aux.nombre))then begin
+            if(not estaBorrado('@',regM.nombre))then begin
                 seek(a,pos);
-                write(a,aux);
-                cont:=cont-1;
+                write(a,regM);
             end;
         end;
 
-        pos:=pos+1;
+        pos:=filepos(a);
     end;
-    if(pos>0)and(cont<(filesize(a)-1))then begin
-        seek(a,cont);
-        truncate(a);
-    end;
+    seek(a,(filesize(a)-cont));
+    truncate(a);
+    
+    
     close(a);
 end; 
 
@@ -154,7 +153,9 @@ begin
     assign(archivo_aves,'especies_en_via_de_extincion');
     //crear_archivo_aves(archivo_aves);
     imprimir(archivo_aves);
+    
     eliminarAves(archivo_aves);
+    writeln('ARCHIVO CON BAJAS');
     imprimir(archivo_aves);
  
     compactar(archivo_aves);
