@@ -82,4 +82,6 @@ begin
     actualizarMaestro(archivo_maestro,prendas_absoletas);
     assign(archivoCompactado,'maestro_actualizado');
     compactacion(archivo_maestro,archivoCompactado);
+    {erase(archivo_maestro);
+    rename(archivoCompactado,'maestro');}
 end.
