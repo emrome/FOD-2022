@@ -71,61 +71,43 @@ procedure actualizarMaestro(var mae:maestro;var vDet:vDetalles);
 var
     i:integer;
     min:infoDetalle;
-    maxF,minF:longInt;
-    maxV,minV:integer;
+    maxS,minS:infoDetalle;
     arregloInfo:=vInfo;
     regM:emision;
+    aux:infoDetalle;
 begin
-    maxV:=0;
-    minV:=9999;
+    maxS.vendidos:=0;
+    minS.vendidos:=9999;
     reset(mae);
     for(i:=1 to CANT_DET)do begin
         reset(vDet[i]);
         leer(vDet[i],arregloInfo[i]);
     end;
-
     minimo(vDet,arregloInfo,min);
     while(min.fecha<>VALOR_ALTO) do begin
-        read(mae,regM);
-        while((regM.fecha<>min.fecha)and(regM.codSemanario<>min.codSemanario))do 
-            read(mae,regM);
+        aux:= min;
         while((regM.fecha=min.fecha)and(regM.codSemanario=min.codSemanario))do begin
-            regM.ejemplaresVendidos:=regM.ejemplaresVendidos+min.ejemplaresVendidos;
-            regM.totalEjemplares:=regM.totalEjemplares-min.ejemplaresVendidos;
+            aux.vendidos:= aux.vendidos + min.ejemplaresVendidos;
             minimo(vDet,arregloInfo,min);
         end;
+
+        // Busqueda en Maestro
+        read(mae,regM);
+        while((regM.fecha<>aux.fecha)and(regM.codSemanario<>aux.codSemanario))do 
+            read(mae,regM);
+        
+        // Minimo y Máximo
+        if(aux.vendidos > maxS.vendidos) then max:=aux;
+        if(aux.vendidos < minS.vendidos) then min:=aux;
+
+        // Actualizo información
         seek(mae,filepos(mae)-1);
         write(mae,regM);
     end;
-    
-    close(mae);
-    for(i:=1 to CANT_DET)do 
-        close(vDet[i]);
-end;
-
-
-procedure informarMaxMin(var mae:maestro);
-var
-    regM,eMin,eMax:emision;
-begin
-    eMin.ejemplaresVendidos:=0;
-    eMin.ejemplaresVendidos:=9999;
-    reset(mae);
-    while(not eof(mae))do begin
-        read(mae,regM);
-        if(regM.ejemplaresVendidos<min)then 
-            eMin:=regM
-
-        if(regM.ejemplaresVendidos>max)then 
-            eMax:=regM
-
-    end;
-    close(mae);
     writeln('Emision con menos ventas: ')
-    writeln('Fecha: 'eMin.fecha,' Codigo Semanario: ',eMin.codSemanario,' Nombre Semanario: ',eMin.nombreSemanario,
-    ' '
+    writeln('Fecha: 'minS.fecha,' Código de Semanario: ',minS.codSemanario)
     writeln('Emision con mas ventas: ')
-    writeln(, max.fecha.anio,'-',max.fecha.mes, '-',max.fecha.dia,' codigo de semanario: ', max.codigo_semanario);
+    writeln('Fecha': maxS.fecha,' Código de Semanario: ', maxS.codSemanario);
 end;
 
 var
